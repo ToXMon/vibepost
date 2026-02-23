@@ -1,7 +1,7 @@
-import { prisma } from "@/lib/prisma";
 import { markdownToHtml } from "@/lib/markdown";
 import { notFound } from "next/navigation";
 import SubscribeForm from "@/components/SubscribeForm";
+import { getPost } from "@/lib/storage";
 
 export const dynamic = "force-dynamic";
 
@@ -11,11 +11,7 @@ interface BlogPostPageProps {
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { id } = await params;
-
-  const post = await prisma.post.findUnique({
-    where: { id },
-    include: { author: { select: { name: true } } },
-  });
+  const post = await getPost(id);
 
   if (!post || post.status !== "PUBLISHED") {
     notFound();
@@ -43,12 +39,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 : ""}
             </time>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-3">
-            {post.title || "Untitled"}
-          </h1>
-          {post.author?.name && (
-            <p className="text-neutral-400">by {post.author.name}</p>
-          )}
+          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-3">{post.title || "Untitled"}</h1>
+          <p className="text-neutral-400">by {`${post.authorAddress.slice(0, 6)}...${post.authorAddress.slice(-4)}`}</p>
         </header>
 
         <div
@@ -65,9 +57,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
       <section className="mt-16 border-t border-neutral-800 pt-12 text-center">
         <h2 className="text-2xl font-semibold mb-4">Enjoyed this post?</h2>
-        <p className="text-neutral-400 mb-6">
-          Subscribe to get notified when new posts are published.
-        </p>
+        <p className="text-neutral-400 mb-6">Subscribe to get notified when new posts are published.</p>
         <div className="flex justify-center">
           <SubscribeForm />
         </div>

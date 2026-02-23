@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useState } from 'react';
-import { Menu, X, Wallet } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import AuthButton from './AuthButton';
 
 export default function Navbar() {
@@ -30,14 +30,7 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Desktop Auth & Connect */}
           <div className="hidden md:flex items-center gap-4">
-            <button 
-              className="flex items-center gap-2 px-4 py-2 rounded-lg border border-purple-500/30 bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 transition-all text-sm font-medium"
-            >
-              <Wallet className="w-4 h-4" />
-              Connect Wallet
-            </button>
             <AuthButton />
           </div>
 
@@ -76,12 +69,6 @@ export default function Navbar() {
                 Blog
               </Link>
               <div className="flex flex-col gap-3 pt-4 border-t border-white/10">
-                <button 
-                  className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-purple-500/30 bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 transition-all text-sm font-medium"
-                >
-                  <Wallet className="w-4 h-4" />
-                  Connect Wallet
-                </button>
                 <AuthButton />
               </div>
             </div>

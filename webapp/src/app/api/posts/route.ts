@@ -1,52 +1,38 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { createPost, listPosts } from "@/lib/storage";
 import { requireAuthor } from "@/lib/auth";
+import { pinMarkdownToIpfs } from "@/lib/storage-ipfs";
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const status = searchParams.get("status");
-    const authorId = searchParams.get("authorId");
+    const status = searchParams.get("status") || undefined;
+    const authorAddress = searchParams.get("authorAddress") || undefined;
 
-    const where: Record<string, unknown> = {};
-    if (status) where.status = status;
-    if (authorId) where.authorId = authorId;
-
-    const posts = await prisma.post.findMany({
-      where,
-      include: { author: { select: { id: true, name: true, email: true } } },
-      orderBy: { createdAt: "desc" },
-    });
-
+    const posts = await listPosts({ status, authorAddress });
     return NextResponse.json(posts);
   } catch {
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
     const author = await requireAuthor();
-
     const { title, contentMarkdown, isPaid } = await request.json();
 
     if (!contentMarkdown || typeof contentMarkdown !== "string") {
-      return NextResponse.json(
-        { error: "contentMarkdown is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "contentMarkdown is required" }, { status: 400 });
     }
 
-    const post = await prisma.post.create({
-      data: {
-        title: title || "Untitled",
-        contentMarkdown,
-        isPaid: isPaid || false,
-        authorId: author.id,
-      },
+    const ipfsCid = await pinMarkdownToIpfs({ title, contentMarkdown, authorAddress: author.address });
+
+    const post = await createPost({
+      title,
+      contentMarkdown,
+      isPaid,
+      authorAddress: author.address,
+      ipfsCid,
     });
 
     return NextResponse.json(post, { status: 201 });
@@ -54,9 +40,6 @@ export async function POST(request: NextRequest) {
     if (error instanceof Error && error.message === "Unauthorized") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

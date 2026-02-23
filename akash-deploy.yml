@@ -1,0 +1,36 @@
+version: "2.0"
+
+services:
+  vibepost:
+    image: toxmon/vibepost-webapp:0.2.0
+    expose:
+      - port: 3000
+        as: 80
+        to:
+          - global: true
+    env:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_APP_URL=https://vibepost.akash
+
+profiles:
+  compute:
+    vibepost:
+      resources:
+        cpu:
+          units: 1
+        memory:
+          size: 1Gi
+        storage:
+          size: 5Gi
+  placement:
+    dcloud:
+      pricing:
+        vibepost:
+          denom: uakt
+          amount: 10000
+
+deployment:
+  vibepost:
+    dcloud:
+      profile: vibepost
+      count: 1

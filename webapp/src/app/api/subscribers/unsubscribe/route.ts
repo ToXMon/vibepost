@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { unsubscribeByEmail } from "@/lib/storage";
 
 export async function GET(request: NextRequest) {
   try {
@@ -7,34 +7,17 @@ export async function GET(request: NextRequest) {
     const email = searchParams.get("email");
 
     if (!email) {
-      return NextResponse.json(
-        { error: "Email parameter is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Email parameter is required" }, { status: 400 });
     }
 
-    const subscriber = await prisma.subscriber.findUnique({
-      where: { email: email.toLowerCase().trim() },
-    });
-
+    const subscriber = await unsubscribeByEmail(email);
     if (!subscriber) {
-      return NextResponse.json(
-        { error: "Subscriber not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Subscriber not found" }, { status: 404 });
     }
-
-    await prisma.subscriber.update({
-      where: { id: subscriber.id },
-      data: { status: "UNSUBSCRIBED" },
-    });
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
     return NextResponse.redirect(`${appUrl}/unsubscribed`);
   } catch {
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

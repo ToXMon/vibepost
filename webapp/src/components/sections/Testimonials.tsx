@@ -54,7 +54,7 @@ export default function Testimonials() {
             >
               <Quote className="w-8 h-8 text-purple-500/30 mb-4" />
               <p className="text-zinc-300 mb-6 leading-relaxed">
-                "{testimonial.quote}"
+                &quot;{testimonial.quote}&quot;
               </p>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-purple-600/30 flex items-center justify-center text-purple-400 font-medium text-sm">

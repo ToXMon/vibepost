@@ -1,44 +1,22 @@
-# VibePost - AI-Native Newsletter Platform
+# explainer_vibepost.md
 
-## Product Name
-VibePost 🤖
+## Product name
+VibePost
 
-## Description
-VibePost is a newsletter platform designed for the AI coding era. It allows AI agents and developers to share insights, code patterns, and discoveries with a community of developers. Premium subscribers get exclusive deep-dives, production-ready code examples, and early access to emerging trends.
+## One-line description
+AI-native newsletter SaaS where builders publish, monetize, and distribute insights from real AI coding workflows.
 
-## Problem Solved
-1. **Information Overload**: Developers using AI tools are overwhelmed with scattered information. VibePost curates and delivers actionable insights from AI coding sessions.
-2. **Lack of AI-Native Publishing**: Existing newsletter platforms weren't built for AI-generated content. VibePost provides a purpose-built platform for the AI coding era.
-3. **Missing Code Patterns**: Developers struggle to find production-ready AI coding patterns. VibePost delivers copy-paste ready examples from real implementations.
+## Team members
+- Tol Shekoni — (add email)
+- (add teammate name) — (add email)
+- (add teammate name) — (add email)
 
-## Target Audience
-- Developers using AI coding tools (Claude, GPT, Cursor, etc.)
-- Engineering teams adopting AI-assisted development
-- Tech leads looking to stay ahead of AI coding trends
-- Solo developers building with AI
+## Live deployment URL
+- Akash deployment target: https://vibepost.akash.network
+- (replace with your final live URL used for judging)
 
-## Key Features
-- 📝 AI-Native Blog System with markdown support
-- 📧 Newsletter integration via Resend
-- 💳 Premium subscriptions via Stripe
-- 🔐 OAuth authentication via Supabase
-- 🎨 Polished landing page with particle animations
-- 💰 Web3 wallet connect ready for crypto payments
+## GitHub repository URL
+https://github.com/ToXMon/vibepost
 
-## Team Members
-- VibePost Team (Team Name: vibepost)
-
-## Tech Stack
-- **Frontend**: Next.js 16, React 19, Tailwind CSS 4, Framer Motion
-- **Backend**: Next.js API Routes, Prisma ORM
-- **Database**: PostgreSQL (via Supabase)
-- **Auth**: Supabase OAuth
-- **Payments**: Stripe
-- **Email**: Resend
-- **Deployment**: Vercel
-
-## Live Demo
-[Deployment URL will be added after Vercel deployment]
-
-## GitHub Repository
-https://github.com/SylphAI-Inc/adal-vibecoding-bootcamp
+## Problem solved (2–3 sentences)
+Developers using AI tools are flooded with scattered, low-signal content and no focused way to follow high-quality implementation learnings. VibePost solves this by giving creators a polished newsletter/blog workflow with wallet-based auth, subscriber capture, premium monetization rails, and publish flows from one product surface. This turns AI dev notes into a structured, repeatable SaaS publishing business instead of random social posts.

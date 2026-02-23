@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { getPost, listActiveSubscribers, updatePost } from "@/lib/storage";
 import { requireAuthor } from "@/lib/auth";
-import { resend } from "@/lib/resend";
+import { getResend } from "@/lib/resend";
 import { markdownToHtml, buildEmailHtml } from "@/lib/markdown";
 import { validateEmailSize } from "@/lib/sanitize";
 import { rateLimit } from "@/lib/rate-limit";
@@ -25,19 +25,13 @@ export async function POST(
       );
     }
 
-    const post = await prisma.post.findUnique({ where: { id } });
-
-    if (!post) {
-      return NextResponse.json({ error: "Post not found" }, { status: 404 });
-    }
-    if (post.authorId !== author.id) {
+    const post = await getPost(id);
+    if (!post) return NextResponse.json({ error: "Post not found" }, { status: 404 });
+    if (post.authorAddress.toLowerCase() !== author.address.toLowerCase()) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
     if (post.emailSentAt) {
-      return NextResponse.json(
-        { error: "Newsletter already sent for this post" },
-        { status: 409 }
-      );
+      return NextResponse.json({ error: "Newsletter already sent for this post" }, { status: 409 });
     }
 
     const bodyHtml = markdownToHtml(post.contentMarkdown);
@@ -46,77 +40,50 @@ export async function POST(
     const sizeCheck = validateEmailSize(bodyHtml);
     if (!sizeCheck.valid) {
       return NextResponse.json(
-        {
-          error: `Post content exceeds maximum email size (${Math.round(sizeCheck.size / 1024)}KB / 100KB limit)`,
-        },
+        { error: `Post content exceeds maximum email size (${Math.round(sizeCheck.size / 1024)}KB / 100KB limit)` },
         { status: 413 }
       );
     }
 
-    const subscribers = await prisma.subscriber.findMany({
-      where: { status: "ACTIVE" },
-    });
+    const subscribers = await listActiveSubscribers();
 
     if (subscribers.length === 0) {
-      await prisma.post.update({
-        where: { id },
-        data: {
-          status: "PUBLISHED",
-          publishedAt: new Date(),
-        },
-      });
-      return NextResponse.json({
-        message: "Post published but no active subscribers to email",
-        emailsSent: 0,
-      });
+      await updatePost(id, { status: "PUBLISHED", publishedAt: new Date().toISOString() });
+      return NextResponse.json({ message: "Post published but no active subscribers to email", emailsSent: 0 });
     }
 
     const title = post.title || "New Blog Post";
     let sentCount = 0;
 
     for (const subscriber of subscribers) {
-      if (post.isPaid) {
-        // Skip free subscribers for paid posts (Stripe integration needed)
-        continue;
-      }
+      if (post.isPaid) continue;
 
       const unsubscribeUrl = `${appUrl}/api/subscribers/unsubscribe?email=${encodeURIComponent(subscriber.email)}`;
       const emailHtml = buildEmailHtml(title, bodyHtml, unsubscribeUrl);
 
+      const resend = getResend();
       await resend.emails.send({
         from: process.env.RESEND_FROM_EMAIL || "newsletter@example.com",
         to: subscriber.email,
         subject: title,
         html: emailHtml,
-        headers: {
-          "List-Unsubscribe": `<${unsubscribeUrl}>`,
-        },
+        headers: { "List-Unsubscribe": `<${unsubscribeUrl}>` },
       });
 
       sentCount++;
     }
 
-    await prisma.post.update({
-      where: { id },
-      data: {
-        status: "PUBLISHED",
-        publishedAt: new Date(),
-        emailSentAt: new Date(),
-      },
+    await updatePost(id, {
+      status: "PUBLISHED",
+      publishedAt: new Date().toISOString(),
+      emailSentAt: new Date().toISOString(),
     });
 
-    return NextResponse.json({
-      message: "Post published and newsletter sent",
-      emailsSent: sentCount,
-    });
+    return NextResponse.json({ message: "Post published and newsletter sent", emailsSent: sentCount });
   } catch (error) {
     if (error instanceof Error && error.message === "Unauthorized") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    console.error("Publish error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
