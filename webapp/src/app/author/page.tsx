@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import PostEditor from "@/components/PostEditor";
 import PublishButton from "@/components/PublishButton";
 import AuthButton from "@/components/AuthButton";
+import AgentStudio from "@/components/AgentStudio";
 
 interface WalletUser {
   address: string;
@@ -134,6 +135,8 @@ export default function AuthorPage() {
           </button>
         </div>
       </div>
+
+      <AgentStudio onDraftsCreated={fetchPosts} />
 
       {posts.length === 0 ? (
         <p className="text-center text-neutral-500 py-12">No posts yet. Create your first post!</p>

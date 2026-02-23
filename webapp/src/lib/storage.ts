@@ -4,6 +4,7 @@ import { randomUUID } from "crypto";
 
 export type PostStatus = "DRAFT" | "PUBLISHED" | "ARCHIVED";
 export type SubscriberStatus = "ACTIVE" | "UNSUBSCRIBED";
+export type AgentRunStatus = "QUEUED" | "COMPLETED" | "FAILED";
 
 export interface PostRecord {
   id: string;
@@ -27,9 +28,26 @@ export interface SubscriberRecord {
   updatedAt: string;
 }
 
+export interface AgentRunRecord {
+  id: string;
+  authorAddress: string;
+  topic: string;
+  referenceMaterial: string;
+  status: AgentRunStatus;
+  freeTitle?: string;
+  freeMarkdown?: string;
+  premiumTitle?: string;
+  premiumMarkdown?: string;
+  notes?: string;
+  error?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface DbShape {
   posts: PostRecord[];
   subscribers: SubscriberRecord[];
+  agentRuns: AgentRunRecord[];
 }
 
 const DATA_DIR = path.join(process.cwd(), ".data");
@@ -40,7 +58,7 @@ async function ensureDb() {
   try {
     await fs.access(DATA_FILE);
   } catch {
-    const initial: DbShape = { posts: [], subscribers: [] };
+    const initial: DbShape = { posts: [], subscribers: [], agentRuns: [] };
     await fs.writeFile(DATA_FILE, JSON.stringify(initial, null, 2), "utf-8");
   }
 }
@@ -48,7 +66,12 @@ async function ensureDb() {
 async function readDb(): Promise<DbShape> {
   await ensureDb();
   const raw = await fs.readFile(DATA_FILE, "utf-8");
-  return JSON.parse(raw) as DbShape;
+  const parsed = JSON.parse(raw) as Partial<DbShape>;
+  return {
+    posts: parsed.posts ?? [],
+    subscribers: parsed.subscribers ?? [],
+    agentRuns: parsed.agentRuns ?? [],
+  };
 }
 
 async function writeDb(db: DbShape) {
@@ -160,4 +183,50 @@ export async function unsubscribeByEmail(email: string) {
   existing.updatedAt = new Date().toISOString();
   await writeDb(db);
   return existing;
+}
+
+export async function createAgentRun(input: {
+  authorAddress: string;
+  topic: string;
+  referenceMaterial: string;
+}) {
+  const db = await readDb();
+  const now = new Date().toISOString();
+  const run: AgentRunRecord = {
+    id: randomUUID(),
+    authorAddress: input.authorAddress.toLowerCase(),
+    topic: input.topic,
+    referenceMaterial: input.referenceMaterial,
+    status: "QUEUED",
+    createdAt: now,
+    updatedAt: now,
+  };
+  db.agentRuns.push(run);
+  await writeDb(db);
+  return run;
+}
+
+export async function updateAgentRun(id: string, patch: Partial<AgentRunRecord>) {
+  const db = await readDb();
+  const idx = db.agentRuns.findIndex((r) => r.id === id);
+  if (idx === -1) return null;
+  db.agentRuns[idx] = {
+    ...db.agentRuns[idx],
+    ...patch,
+    updatedAt: new Date().toISOString(),
+  };
+  await writeDb(db);
+  return db.agentRuns[idx];
+}
+
+export async function getAgentRun(id: string) {
+  const db = await readDb();
+  return db.agentRuns.find((r) => r.id === id) ?? null;
+}
+
+export async function listAgentRuns(authorAddress: string) {
+  const db = await readDb();
+  return db.agentRuns
+    .filter((r) => r.authorAddress.toLowerCase() === authorAddress.toLowerCase())
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }

@@ -34,6 +34,17 @@ RESEND_API_KEY=""
 STRIPE_SECRET_KEY=""
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=""
 STRIPE_WEBHOOK_SECRET=""
+
+# Agent service provider (venice|akashml|openai)
+AGENT_PROVIDER="venice"
+VENICE_API_KEY=""
+VENICE_BASE_URL="https://api.venice.ai/api/v1"
+VENICE_MODEL="llama-3.1-405b"
+
+# Optional AkashML settings (if AGENT_PROVIDER=akashml)
+AKASHML_API_KEY=""
+AKASHML_BASE_URL="https://chatapi.akash.network/api/v1"
+AKASHML_MODEL="Meta-Llama-3.1-70B-Instruct-FP8"
 ```
 
 ## Decentralized deployment (Akash)
