@@ -1,75 +1,80 @@
 'use client';
 import { motion } from 'framer-motion';
-import { Sparkles, Zap, Clock, Code2, Brain, TrendingUp } from 'lucide-react';
+import { Sparkles, Zap, Shield, Coins, Brain, Rocket } from 'lucide-react';
 
 const features = [
   {
-    icon: Brain,
-    title: 'Wallet-Native Auth',
-    description: 'SIWE-based authentication removes OAuth lock-in and gives creators direct wallet identity.',
-  },
-  {
-    icon: Zap,
-    title: 'IPFS Content Layer',
-    description: 'Posts are pinned to IPFS for portable publishing and verifiable content provenance.',
-  },
-  {
-    icon: Clock,
-    title: 'Akash Deployment Ready',
-    description: 'Run production workloads on decentralized cloud capacity instead of centralized hosting defaults.',
-  },
-  {
-    icon: Code2,
-    title: 'Developer-First APIs',
-    description: 'Simple endpoints and markdown-first authoring so teams can ship hacks into products quickly.',
-  },
-  {
-    icon: TrendingUp,
-    title: 'Onchain-Adjacent Monetization',
-    description: 'Keep Stripe if needed today, add crypto rails as your audience shifts to wallet-native users.',
+    icon: Shield,
+    title: 'Wallet-Native Identity',
+    description: 'SIWE auth keeps creators sovereign and removes OAuth lock-in from day one.',
+    metric: 'Zero OAuth dependency',
   },
   {
     icon: Sparkles,
-    title: 'High-Polish Motion UX',
-    description: 'Framer-motion storytelling and layered visual rhythm built for demo-day impact.',
+    title: 'IPFS-backed Publishing',
+    description: 'Every post can be pinned and resolved by CID for verifiable content provenance.',
+    metric: 'Content portability',
+  },
+  {
+    icon: Rocket,
+    title: 'Akash Deployment Path',
+    description: 'Ship to decentralized cloud with reproducible containers and no Vercel reliance.',
+    metric: 'Docker + SDL ready',
+  },
+  {
+    icon: Brain,
+    title: 'Creator Workflow',
+    description: 'Compose, preview, and publish with productized flow designed for fast shipping.',
+    metric: '60s publish loop',
+  },
+  {
+    icon: Coins,
+    title: 'Monetization Rails',
+    description: 'Start with Stripe and layer in crypto-native billing as audience behavior evolves.',
+    metric: 'Free + premium plans',
+  },
+  {
+    icon: Zap,
+    title: 'Demo-Day Polish',
+    description: 'Neon-cosmic visual language with intentional motion built for immediate impact.',
+    metric: 'Judge-first UX',
   },
 ];
 
 export default function Features() {
   return (
-    <section id="features" className="relative py-24 bg-black">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="features" className="relative bg-black py-24">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="mb-16 text-center"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Built for the AI Coding Era
-          </h2>
-          <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
-            Everything you need to stay ahead in the rapidly evolving world of AI-assisted development.
+          <h2 className="mb-4 text-4xl font-bold text-white md:text-5xl">Built for first-place demos</h2>
+          <p className="mx-auto max-w-2xl text-lg text-zinc-400">
+            Real SaaS architecture, decentralized primitives, and a visual identity that feels like an actual product category.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, index) => (
-            <motion.div
+            <motion.article
               key={feature.title}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              transition={{ duration: 0.45, delay: index * 0.08 }}
               viewport={{ once: true }}
-              className="p-6 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-purple-500/30 transition-all group"
+              className="group rounded-2xl border border-white/10 bg-gradient-to-b from-white/10 to-white/5 p-6 transition-all hover:-translate-y-1 hover:border-cyan-400/40 hover:shadow-[0_0_35px_rgba(56,189,248,0.2)]"
             >
-              <div className="w-12 h-12 rounded-xl bg-purple-600/20 flex items-center justify-center mb-4 group-hover:bg-purple-600/30 transition-colors">
-                <feature.icon className="w-6 h-6 text-purple-400" />
+              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl border border-purple-400/30 bg-purple-600/20">
+                <feature.icon className="h-6 w-6 text-purple-200" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">{feature.title}</h3>
-              <p className="text-zinc-400">{feature.description}</p>
-            </motion.div>
+              <h3 className="mb-2 text-xl font-semibold text-white">{feature.title}</h3>
+              <p className="mb-4 text-zinc-400">{feature.description}</p>
+              <p className="text-xs font-medium tracking-[0.12em] text-cyan-300">{feature.metric}</p>
+            </motion.article>
           ))}
         </div>
       </div>
