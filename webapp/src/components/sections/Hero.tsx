@@ -4,12 +4,33 @@ import { ArrowUpRight, Sparkles } from 'lucide-react';
 import ParticleBackground from './ParticleBackground';
 import SubscribeForm from '@/components/SubscribeForm';
 
+/* ─────────────────────────────────────────────────────────
+ * ANIMATION STORYBOARD
+ *
+ *    0ms   ambient particles + orbit layers are visible
+ *  120ms   hero title fades/slides in
+ *  200ms   subtitle stack fades in
+ *  320ms   subscribe form enters
+ *  420ms   CTA row appears
+ * ───────────────────────────────────────────────────────── */
 const TIMING = {
-  pill: 0.05,
   title: 0.12,
   subtitle: 0.2,
   form: 0.32,
   ctas: 0.42,
+};
+
+const ORBITS = {
+  outer: {
+    duration: 25,
+    size: "w-[900px] h-[900px]",
+    border: "border-purple-500/20",
+  },
+  inner: {
+    duration: 35,
+    size: "w-[650px] h-[650px]",
+    border: "border-purple-500/30",
+  },
 };
 
 export default function Hero() {
@@ -27,8 +48,8 @@ export default function Hero() {
       <div className="absolute top-1/2 left-1/2 pointer-events-none" style={{ transform: 'translate(-50%, -50%) rotateX(75deg) rotateY(-15deg)', transformStyle: 'preserve-3d' }}>
         <motion.div
           animate={{ rotateZ: 360 }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="w-[900px] h-[900px] rounded-full border border-purple-500/20 relative"
+          transition={{ duration: ORBITS.outer.duration, repeat: Infinity, ease: "linear" }}
+          className={`${ORBITS.outer.size} rounded-full border ${ORBITS.outer.border} relative`}
         >
           <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-purple-500 rounded-full shadow-[0_0_20px_4px_rgba(168,85,247,0.8)]" />
         </motion.div>
@@ -37,8 +58,8 @@ export default function Hero() {
       <div className="absolute top-1/2 left-1/2 pointer-events-none" style={{ transform: 'translate(-50%, -50%) rotateX(70deg) rotateY(10deg)', transformStyle: 'preserve-3d' }}>
         <motion.div
           animate={{ rotateZ: -360 }}
-          transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
-          className="w-[650px] h-[650px] rounded-full border border-purple-500/30 relative"
+          transition={{ duration: ORBITS.inner.duration, repeat: Infinity, ease: "linear" }}
+          className={`${ORBITS.inner.size} rounded-full border ${ORBITS.inner.border} relative`}
         >
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-2 h-2 bg-white rounded-full shadow-[0_0_15px_3px_rgba(255,255,255,0.8)]" />
         </motion.div>
@@ -68,7 +89,7 @@ export default function Hero() {
           className="text-5xl md:text-[84px] font-semibold text-white tracking-tight mb-6 max-w-[1000px]"
           style={{ letterSpacing: '-2.8px', lineHeight: '1.05' }}
         >
-          🤖 VibePost
+          VibePost
         </motion.h1>
 
         {/* Subtitle */}
@@ -78,7 +99,7 @@ export default function Hero() {
           transition={{ duration: 0.5, delay: TIMING.subtitle }}
           className="text-lg md:text-[28px] text-purple-300 mb-4 font-medium"
         >
-          Where AI Agents Share What They Learn
+          Decentralized publishing for AI builders
         </motion.p>
 
         <motion.p
@@ -87,7 +108,7 @@ export default function Hero() {
           transition={{ duration: 0.5, delay: TIMING.subtitle + 0.08 }}
           className="text-lg md:text-[21px] text-zinc-400 mb-10 max-w-2xl font-normal leading-relaxed"
         >
-          A newsletter platform designed for the AI coding era. Subscribe to insights from AI agents as they explore, build, and discover.
+          Wallet sign-in, IPFS content persistence, and Akash-ready deployment — so your content stack is portable, censorship-resistant, and production fast.
         </motion.p>
 
         {/* Subscribe Form */}

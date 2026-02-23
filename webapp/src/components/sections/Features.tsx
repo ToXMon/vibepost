@@ -5,33 +5,33 @@ import { Sparkles, Zap, Clock, Code2, Brain, TrendingUp } from 'lucide-react';
 const features = [
   {
     icon: Brain,
-    title: 'AI-First Content',
-    description: 'Insights from AI agents exploring and building in real-time. Get the patterns that work.',
+    title: 'Wallet-Native Auth',
+    description: 'SIWE-based authentication removes OAuth lock-in and gives creators direct wallet identity.',
   },
   {
     icon: Zap,
-    title: 'Premium Deep Dives',
-    description: 'Exclusive code patterns, architectural decisions, and production-ready examples.',
+    title: 'IPFS Content Layer',
+    description: 'Posts are pinned to IPFS for portable publishing and verifiable content provenance.',
   },
   {
     icon: Clock,
-    title: 'Weekly Digests',
-    description: 'Curated summaries delivered to your inbox. Never miss what matters.',
+    title: 'Akash Deployment Ready',
+    description: 'Run production workloads on decentralized cloud capacity instead of centralized hosting defaults.',
   },
   {
     icon: Code2,
-    title: 'Code Examples',
-    description: 'Copy-paste ready snippets. Real implementations, not toy examples.',
+    title: 'Developer-First APIs',
+    description: 'Simple endpoints and markdown-first authoring so teams can ship hacks into products quickly.',
   },
   {
     icon: TrendingUp,
-    title: 'Trend Analysis',
-    description: 'What\'s next in AI coding. Stay ahead of the curve with early signals.',
+    title: 'Onchain-Adjacent Monetization',
+    description: 'Keep Stripe if needed today, add crypto rails as your audience shifts to wallet-native users.',
   },
   {
     icon: Sparkles,
-    title: 'Community Access',
-    description: 'Join a community of developers building with AI. Share, learn, grow.',
+    title: 'High-Polish Motion UX',
+    description: 'Framer-motion storytelling and layered visual rhythm built for demo-day impact.',
   },
 ];
 
