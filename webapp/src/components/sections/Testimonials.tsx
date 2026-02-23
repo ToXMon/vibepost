@@ -4,68 +4,67 @@ import { Quote } from 'lucide-react';
 
 const testimonials = [
   {
-    quote: "VibePost has become my go-to source for staying current with AI coding patterns. The code examples are production-ready, not toy demos.",
-    author: "Alex Chen",
-    role: "Senior Engineer, Vercel",
-    avatar: "AC"
+    quote:
+      'VibePost became our internal edge feed. We now ship faster because the writeups include decisions, tradeoffs, and what broke.',
+    author: 'Alex Chen',
+    role: 'Staff Engineer',
+    avatar: 'AC',
   },
   {
-    quote: "The weekly digest saves me hours of research. I get actionable insights delivered before they hit the mainstream.",
-    author: "Sarah Miller",
-    role: "Founder, AI Startup",
-    avatar: "SM"
+    quote:
+      'The premium posts are practical and monetizable. It feels like getting architecture notes from teams already ahead of us.',
+    author: 'Sarah Miller',
+    role: 'Founder',
+    avatar: 'SM',
   },
   {
-    quote: "Best investment I've made for leveling up my AI-assisted development workflow. The premium content is worth every penny.",
-    author: "Marcus Johnson",
-    role: "Full Stack Developer",
-    avatar: "MJ"
-  }
+    quote:
+      'Finally a signal-first AI dev publication. Less hype, more implementation details I can reuse the same day.',
+    author: 'Marcus Johnson',
+    role: 'Full-Stack Developer',
+    avatar: 'MJ',
+  },
 ];
 
 export default function Testimonials() {
   return (
-    <section className="relative py-24 bg-black">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative bg-black py-24">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="mb-14 text-center"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            What Developers Say
-          </h2>
-          <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
-            Join thousands of developers building smarter with AI
+          <h2 className="mb-4 text-4xl font-bold text-white md:text-5xl">Built for teams that actually ship</h2>
+          <p className="mx-auto max-w-2xl text-lg text-zinc-400">
+            Social proof from builders using VibePost to turn AI workflows into repeatable output.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {testimonials.map((testimonial, index) => (
-            <motion.div
+            <motion.article
               key={testimonial.author}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              transition={{ duration: 0.45, delay: index * 0.08 }}
               viewport={{ once: true }}
-              className="p-6 rounded-2xl border border-white/10 bg-white/5"
+              className="group rounded-2xl border border-white/10 bg-gradient-to-b from-white/10 to-white/5 p-6 transition-all hover:-translate-y-1 hover:border-purple-400/40"
             >
-              <Quote className="w-8 h-8 text-purple-500/30 mb-4" />
-              <p className="text-zinc-300 mb-6 leading-relaxed">
-                &quot;{testimonial.quote}&quot;
-              </p>
+              <Quote className="mb-4 h-8 w-8 text-purple-300/40" />
+              <p className="mb-6 leading-relaxed text-zinc-200">“{testimonial.quote}”</p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-purple-600/30 flex items-center justify-center text-purple-400 font-medium text-sm">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-purple-400/40 bg-purple-600/20 text-sm font-medium text-purple-200">
                   {testimonial.avatar}
                 </div>
                 <div>
-                  <p className="text-white font-medium">{testimonial.author}</p>
-                  <p className="text-zinc-500 text-sm">{testimonial.role}</p>
+                  <p className="font-medium text-white">{testimonial.author}</p>
+                  <p className="text-sm text-zinc-500">{testimonial.role}</p>
                 </div>
               </div>
-            </motion.div>
+            </motion.article>
           ))}
         </div>
       </div>
